@@ -12,6 +12,9 @@ export class AuthService {
 
   loggedInSource = new Subject<boolean>();
   loggedInObservable = this.loggedInSource.asObservable();
+  isAdminSource = new Subject<boolean>();
+  isAdminObservable = this.isAdminSource.asObservable();
+  isAdmin = false;
 
   constructor(private httpClient: HttpClient, private router: Router) {}
 
@@ -20,6 +23,8 @@ export class AuthService {
       next:(ret: LoginData)=>{
         localStorage.setItem('token', ret.token);
         this.loggedInSource.next(true);
+        this.isAdmin = ret.admin;
+        this.publishIsAdmin();
         return true;
       },
       error: () => {
@@ -40,5 +45,9 @@ export class AuthService {
 
   loggedIn() {
     return localStorage.getItem('token') != null;
+  }
+
+  publishIsAdmin() {
+    this.isAdminSource.next(this.isAdmin);
   }
 }

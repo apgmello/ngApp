@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
@@ -8,14 +9,20 @@ import { AuthService } from 'src/app/services/auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent {
+export class LoginComponent  {
   loginUserData = new User();
-
-  constructor(private authService: AuthService, private router: Router) {}
-
+  isAdminSubscription : Subscription;
+  
+  constructor(private authService: AuthService, private router: Router) {
+    this.isAdminSubscription = this.authService.isAdminObservable.subscribe({
+      next: (isAdmin) => {
+          if(!isAdmin) this.router.navigate(["/cart"]);
+          else this.router.navigate(["/admin"]);
+        }
+    })
+  }
+  
   loginUser(){
-    if(this.authService.loginUser(this.loginUserData)) {
-      this.router.navigate(["/cart"]);
-    }
+    this.authService.loginUser(this.loginUserData)
   }
 }

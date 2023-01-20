@@ -14,23 +14,29 @@ import { AuthGuard } from './services/auth-guard';
 import { ProductsComponent } from './components/products/products.component';
 import { ProductService } from './services/product.service';
 import { CartComponent } from './components/cart/cart.component';
-
+import { CartService } from './services/cart.service';
+import { CheckoutComponent } from './components/checkout/checkout.component';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { AdminComponent } from './components/admin/admin.component';
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     UserRegisterComponent,
     ProductsComponent,
-    CartComponent
+    CartComponent,
+    CheckoutComponent,
+    AdminComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    NgbModule
+    NgbModule,
+    SweetAlert2Module.forRoot()
   ],
-  providers: [AuthService, AuthGuard, UserService, ProductService],
-  bootstrap: [AppComponent]
+  providers: [AuthService, AuthGuard, UserService, ProductService, CartService],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
