@@ -7,10 +7,10 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
         <li class="nav-item" *ngIf="isAdmin">
-          <a class="nav-link" routerLink="/events" routerLinkActive="active">Produtos</a>
+          <a class="nav-link" style="cursor:pointer" (click)="navigate('products')">Produtos</a>
         </li>
         <li class="nav-item" *ngIf="isAdmin">
-          <a class="nav-link" routerLink="/special" routerLinkActive="active">Usuários</a>
+          <a class="nav-link" style="cursor:pointer" (click)="navigate('users')">Usuários</a>
         </li>
     </ul>
     <ul class="navbar-nav">
@@ -19,6 +19,7 @@
         <span class="badge rounded-pill badge-notification bg-danger" *ngIf="itemsInCart>0 && !isAdmin" style="padding:0.15em 0.4em!important;position: absolute;">{{itemsInCart}}</span>
       </a>&nbsp;&nbsp;&nbsp;
       <a class="nav-link" style="cursor:pointer" *ngIf="loggedIn" (click)="logout()">Logout</a>    
+      <a class="nav-link" style="cursor:pointer" *ngIf="!loggedIn" (click)="login()">Login</a>    
     </ul>
   </div>
 </nav>    

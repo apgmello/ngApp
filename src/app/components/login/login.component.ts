@@ -9,20 +9,27 @@ import { AuthService } from 'src/app/services/auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent  {
+export class LoginComponent {
   loginUserData = new User();
-  isAdminSubscription : Subscription;
-  
+  isAdminSubscription: Subscription;
+  loggedInSubscription: Subscription;
+  loggedIn = false;
+
   constructor(private authService: AuthService, private router: Router) {
+    this.loggedInSubscription = this.authService.loggedInObservable.subscribe({
+      next: (loggedIn) => {
+        this.loggedIn = loggedIn;
+      }
+    })
     this.isAdminSubscription = this.authService.isAdminObservable.subscribe({
       next: (isAdmin) => {
-          if(!isAdmin) this.router.navigate(["/cart"]);
-          else this.router.navigate(["/admin"]);
-        }
-    })
+        if (!isAdmin && this.loggedIn) this.router.navigate(['/cart']);
+        else this.router.navigate(['/products']);
+      },
+    });
   }
-  
-  loginUser(){
-    this.authService.loginUser(this.loginUserData)
+
+  loginUser() {
+    this.authService.loginUser(this.loginUserData);
   }
 }

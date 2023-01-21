@@ -38,12 +38,15 @@ export class AppComponent implements OnInit {
     })
     this.cartService.publishItemsInCart()
     this.authService.publishIsAdmin()
-    this.isAdmin  = this.authService.isAdmin;
   }
 
   ngOnInit(): void {
     if(this.authService.loggedIn() && !this.isAdmin)
       this.router.navigate(['/products']);
+  }
+  
+  login(){
+    this.router.navigate(['/login']);
   }
   
   logout() {

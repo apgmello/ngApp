@@ -1,8 +1,8 @@
 import { UserService } from './services/user.service';
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
+import { CurrencyPipe, registerLocaleData } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -17,7 +17,11 @@ import { CartComponent } from './components/cart/cart.component';
 import { CartService } from './services/cart.service';
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
-import { AdminComponent } from './components/admin/admin.component';
+import { UserListComponent } from './components/user-list/user-list.component';
+import { NewProductComponent } from './components/new-product/new-product.component';
+import localePt from '@angular/common/locales/pt';
+
+registerLocaleData(localePt);
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,7 +30,8 @@ import { AdminComponent } from './components/admin/admin.component';
     ProductsComponent,
     CartComponent,
     CheckoutComponent,
-    AdminComponent,
+    UserListComponent,
+    NewProductComponent,
   ],
   imports: [
     BrowserModule,
@@ -34,9 +39,17 @@ import { AdminComponent } from './components/admin/admin.component';
     FormsModule,
     HttpClientModule,
     NgbModule,
-    SweetAlert2Module.forRoot()
+    SweetAlert2Module.forRoot(),
   ],
-  providers: [AuthService, AuthGuard, UserService, ProductService, CartService],
+  providers: [
+    AuthService, 
+    AuthGuard, 
+    UserService, 
+    ProductService, 
+    CartService, 
+    CurrencyPipe,
+    {provide: LOCALE_ID, useValue: 'pt' }
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

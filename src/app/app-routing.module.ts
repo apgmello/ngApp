@@ -1,33 +1,28 @@
+import { UserListComponent } from './components/user-list/user-list.component';
 import { AdminGuard } from './services/admin-guard.';
-import { AdminComponent } from './components/admin/admin.component';
+
 import { CheckoutComponent } from './components/checkout/checkout.component';
 import { AuthGuard } from './services/auth-guard';
 import { CartComponent } from './components/cart/cart.component';
 import { ProductsComponent } from './components/products/products.component';
-import { NgModule } from '@angular/core';
+import { NgModule, Component } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
 import { UserRegisterComponent } from './components/user-register/user-register.component';
 
 const routes: Routes = [
-
-  { path: '', redirectTo: '', pathMatch: 'full' },
-  {
-    path: 'admin',
-    component: AdminComponent,
-    canActivate: [AuthGuard, AdminGuard]
-  },
+  { path: '', redirectTo: 'products', pathMatch: 'full' },
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
   },
   {
     path: 'products',
-    component: ProductsComponent
+    component: ProductsComponent,
   },
   {
     path: 'register',
-    component: UserRegisterComponent
+    component: UserRegisterComponent,
   },
   {
     path: 'cart',
@@ -36,12 +31,22 @@ const routes: Routes = [
   {
     path: 'checkout',
     component: CheckoutComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'users',
+    component: UserListComponent,
+    canActivate: [AuthGuard, AdminGuard]
+  },
+  {
+    path: 'user-register',
+    component: UserRegisterComponent,
+    canActivate: [AuthGuard, AdminGuard]
   }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

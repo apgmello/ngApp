@@ -1,9 +1,10 @@
 import { User } from './../models/user';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { LoginData } from '../models/login-data';
+import jwt_decode from "jwt-decode";
 
 @Injectable()
 export class AuthService {
@@ -14,7 +15,6 @@ export class AuthService {
   loggedInObservable = this.loggedInSource.asObservable();
   isAdminSource = new Subject<boolean>();
   isAdminObservable = this.isAdminSource.asObservable();
-  isAdmin = false;
 
   constructor(private httpClient: HttpClient, private router: Router) {}
 
@@ -23,7 +23,6 @@ export class AuthService {
       next:(ret: LoginData)=>{
         localStorage.setItem('token', ret.token);
         this.loggedInSource.next(true);
-        this.isAdmin = ret.admin;
         this.publishIsAdmin();
         return true;
       },
@@ -37,6 +36,7 @@ export class AuthService {
   logoutUser() {
     localStorage.clear();
     this.loggedInSource.next(false);
+    this.isAdminSource.next(false);
   }
 
   getToken() {
@@ -48,6 +48,24 @@ export class AuthService {
   }
 
   publishIsAdmin() {
-    this.isAdminSource.next(this.isAdmin);
+    var token = localStorage.getItem('token');
+    if(token) {
+      var decoded = jwt_decode(token) as LoginData;
+      this.isAdminSource.next(decoded.admin);  
+    }
   }
+
+  isAdmin() : boolean {
+    var isAdmin = false;
+    var token = localStorage.getItem('token');
+    if(token) {
+      var decoded = jwt_decode(token) as LoginData;
+      isAdmin = decoded.admin;
+    }
+    return isAdmin;
+  }
+
+  buildHeaders = () =>
+    new HttpHeaders().set('Authorization',  `bearer ${localStorage.getItem('token') ?? ''}` );
+
 }
