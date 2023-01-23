@@ -1,8 +1,10 @@
+import { UserRegisterComponent } from './../user-register/user-register.component';
 import { Subscription } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +17,7 @@ export class LoginComponent {
   loggedInSubscription: Subscription;
   loggedIn = false;
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService, private router: Router,    private modalService: NgbModal) {
     this.loggedInSubscription = this.authService.loggedInObservable.subscribe({
       next: (loggedIn) => {
         this.loggedIn = loggedIn;
@@ -31,5 +33,10 @@ export class LoginComponent {
 
   loginUser() {
     this.authService.loginUser(this.loginUserData);
+  }
+
+  newUser(){
+    const modalRef = this.modalService.open(UserRegisterComponent, {backdrop: false});
+    modalRef.componentInstance.name = 'Bolinho';
   }
 }
